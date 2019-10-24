@@ -124,4 +124,29 @@ std::vector<string> DictionaryTrie::predictUnderscores(
 }
 
 /* TODO */
-DictionaryTrie::~DictionaryTrie() {}
+DictionaryTrie::~DictionaryTrie() {
+
+    deleteNodes( root );
+
+}
+
+void DictionaryTrie::deleteNodes( MWTNode* node ) {
+
+    if( node->hashMap.empty() == true ) {
+        return;
+    }
+    //create an iterator at the beginning
+    auto iterator = node->hashMap.begin();
+    //loop from beginning ot end
+    while( iterator != node->hashMap.end() ) {
+
+        // recurse to each Node stored as values
+        deleteNodes( iterator->second );
+        iterator++;
+
+    }
+
+    //finally delete the current node and return
+    delete node;
+
+}

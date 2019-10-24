@@ -36,7 +36,9 @@ class DictionaryTrie {
         }
     };
 
-    MWTNode* root;    
+    MWTNode* root;
+    
+    void deleteNodes( MWTNode* node );
     
   public:
     /* TODO: add function header */
