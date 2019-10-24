@@ -9,6 +9,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <unordered_map>
 
 using namespace std;
 
@@ -18,7 +19,25 @@ using namespace std;
  */
 class DictionaryTrie {
   private:
-    // TODO: add private members and helper methods here
+    /** Inner class which defines a Multiway tree node */
+    class MWTNode {
+      public:
+        //is it the last letter of a word
+        bool isEnd;
+        //frequency
+        unsigned int freq;
+        //a map that pairs a char to another MWTNode
+        unordered_map<char, MWTNode*> hashMap; 
+        
+        MWTNode() {
+            isEnd = false;
+            freq = 0;
+            hashMap = std::unordered_map<char, MWTNode*>();
+        }
+    };
+
+    MWTNode* root;    
+    
   public:
     /* TODO: add function header */
     DictionaryTrie();

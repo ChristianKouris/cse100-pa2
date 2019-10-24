@@ -24,4 +24,3 @@ TEST(DictTrieTests, EMPTY_TEST) {
     ASSERT_EQ(dict.find("abrakadabra"), false);
 }
 
-/* TODO */
