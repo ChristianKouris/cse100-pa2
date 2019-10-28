@@ -1,7 +1,8 @@
 /**
  * TODO: File Header
  *
- * Author:
+ * Author: Christian Kouris 
+ * Sources: auto (C++) Microsoft Docs, cplusplus reference unordered_map
  */
 #ifndef DICTIONARY_TRIE_HPP
 #define DICTIONARY_TRIE_HPP
@@ -39,6 +40,9 @@ class DictionaryTrie {
     MWTNode* root;
     
     void deleteNodes( MWTNode* node );
+    
+    void listWords( &vector<Pair<string, unsigned int>*>, 
+                    MWTNode* curNode, string curWord );
     
   public:
     /* TODO: add function header */

@@ -114,6 +114,24 @@ bool DictionaryTrie::find(string word) const {
 /* TODO */
 vector<string> DictionaryTrie::predictCompletions(string prefix,
                                                   unsigned int numCompletions) {
+    
+    //first traverse down the Trie so we get to the node for prefix
+    MWTNode* currNode = root;
+    for( int i = 0; i < prefix.size(); i++ ) { 
+
+        //go to the node
+        currNode = currNode->hashMap.find(prefix[i])->second;
+
+        //check to see if we ended up in a node that doesn't exist
+        if( currNode == nullptr ) {
+            return std::vector<string>();
+        }
+
+    }
+
+    //now that we're at the prefix, we want to get everything under it.
+    vector<pair<string,unsigned int>> stringAndFreq = std::vector<std::pair<string, unsigned int>>();
+
     return {};
 }
 
@@ -123,7 +141,6 @@ std::vector<string> DictionaryTrie::predictUnderscores(
     return {};
 }
 
-/* TODO */
 DictionaryTrie::~DictionaryTrie() {
 
     deleteNodes( root );
@@ -150,3 +167,23 @@ void DictionaryTrie::deleteNodes( MWTNode* node ) {
     delete node;
 
 }
+    
+void listWords( &vector<Pair<string, unsigned int>*> wordList, 
+                MWTNode* curNode, string curWord ) {
+
+    //base case of current node being null
+    if( curNode == nullptr ) {
+        return;
+    }
+    
+    //check to see if the current node is the final letter for a word
+    if( curNode->isEnd == true ) {
+
+        //put the word and its frequency into the vector
+        wordList.push_back( 
+            new std::Pair<string, unsigned int>( curWord, curNode->freq ) );
+
+    }
+
+}
+
