@@ -1,7 +1,7 @@
 /**
  * TODO: File Header
  *
- * Author:
+ * Author: Christian Kouris
  */
 #include "DictionaryTrie.hpp"
 #include <iostream>
@@ -130,7 +130,8 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
     }
 
     //now that we're at the prefix, we want to get everything under it.
-    vector<pair<string,unsigned int>> stringAndFreq = std::vector<std::pair<string, unsigned int>>();
+    vector<pair<string,unsigned int>*> stringAndFreq = 
+        std::vector<std::pair<string, unsigned int>*>();
 
     return {};
 }
@@ -168,7 +169,7 @@ void DictionaryTrie::deleteNodes( MWTNode* node ) {
 
 }
     
-void listWords( &vector<Pair<string, unsigned int>*> wordList, 
+void listWords( &vector<pair<string, unsigned int>*> wordList, 
                 MWTNode* curNode, string curWord ) {
 
     //base case of current node being null
@@ -181,7 +182,20 @@ void listWords( &vector<Pair<string, unsigned int>*> wordList,
 
         //put the word and its frequency into the vector
         wordList.push_back( 
-            new std::Pair<string, unsigned int>( curWord, curNode->freq ) );
+            new std::pair<string, unsigned int>( curWord, curNode->freq ) );
+
+    }
+    
+    //create an iterator at the beginning
+    auto iterator = curNode->hashMap.begin();
+    //loop through each key
+    while( iterator != node->hashMap.end() ) {
+
+        //append the key character to the current word
+        newWord = curWord + iterator->first;
+        
+        //recurse down to listwords
+        listWords( wordList, iterator->second, newWord ); 
 
     }
 

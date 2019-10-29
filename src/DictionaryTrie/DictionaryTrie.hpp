@@ -41,7 +41,7 @@ class DictionaryTrie {
     
     void deleteNodes( MWTNode* node );
     
-    void listWords( &vector<Pair<string, unsigned int>*>, 
+    void listWords( &vector<pair<string, unsigned int>*>, 
                     MWTNode* curNode, string curWord );
     
   public:
