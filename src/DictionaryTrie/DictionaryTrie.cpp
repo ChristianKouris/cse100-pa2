@@ -111,7 +111,6 @@ bool DictionaryTrie::find(string word) const {
 
 }
 
-/* TODO */
 vector<string> DictionaryTrie::predictCompletions(string prefix,
                                                   unsigned int numCompletions) {
     
@@ -133,7 +132,29 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
     vector<pair<string,unsigned int>*> stringAndFreq = 
         std::vector<std::pair<string, unsigned int>*>();
 
-    return {};
+    
+    //call the helper function
+    listWords( stringAndFreq, currNode, prefix );
+
+    //we now have an array of every word past prefix. We need to sort it
+    std::sort( stringAndFreq.begin(), stringAndFreq.end(), compareFreq);
+
+    //create a list to hold the predicted completions, create iterators
+    //that will  end on either numCompletion loops or the end of the vector
+    vector<string> completionList = std::vector<string>();
+    auto wordIter = stringAndFreq.begin(); int i = 0;
+    //loop through numCompletion times or the entire vector of pairs
+    while ( i < numCompletions && wordIter != stringAndFreq.end() ) {
+
+        completionList.push_back( (*wordIter)->first );
+
+    }
+
+    //free memory of allocated pairs
+    delete stringAndFreq;
+
+    //return the list of predicted compltions
+    return completionList;
 }
 
 /* TODO */
@@ -201,3 +222,17 @@ void listWords( &vector<pair<string, unsigned int>*> wordList,
 
 }
 
+bool compareFreq( pair<string, unsigned int> p1, 
+                  pair<string, unsigned int> p2 ) {
+
+    //if they have same frequency, they will be in alphabetical order
+    if( p1.second == p2.second ) {
+
+        return p1.compare(p2) < 0;
+
+    }
+
+    return p2.second < p1.second;
+
+
+}
