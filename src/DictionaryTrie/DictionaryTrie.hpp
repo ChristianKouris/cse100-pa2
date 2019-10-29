@@ -1,7 +1,13 @@
 /**
- * TODO: File Header
+ * The purpose of this hpp file is to provide a definition for The 
+ * DictionaryTrie class, it's methods, and the MWTNode subclass.
+ * This DictionaryTrie class is based on the MultiWay Trie model that is
+ * used to store words and the frequency that they appear in. The point of
+ * the methods in this class is to build a MWT by inserting words and to 
+ * predict completions based on a prefix similar to a search bar.
  *
  * Author: Christian Kouris 
+ * Email: ckouris@ucsd.edu
  * Sources: auto (C++) Microsoft Docs, cplusplus reference unordered_map,
  *          std::vector doc, std::pair doc, std::sort doc, string docs
  */
