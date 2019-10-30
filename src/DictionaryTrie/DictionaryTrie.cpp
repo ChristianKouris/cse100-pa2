@@ -25,6 +25,9 @@ DictionaryTrie::DictionaryTrie() {
 /* Insterts a new node into the MWT using the information of "word" and
  * "freq" and returns true if successful. If the string is already in the
  * MWT, the function inserts noting and returns false.
+ *
+ * Parameter: word - the word string we are inserting into the MWT
+ * Parameter: freq - the frequency of the word
  */
 bool DictionaryTrie::insert(string word, unsigned int freq) { 
 
@@ -83,6 +86,8 @@ bool DictionaryTrie::insert(string word, unsigned int freq) {
 /* Searches to see if a word is in the MWT. If the word is in the
  * trie, the function will return true. If the word is not in the trie,
  * it will return false.
+ *
+ * Prameter: word - the string we are looking for in the MWT
  */
 bool DictionaryTrie::find(string word) const { 
 
@@ -133,6 +138,9 @@ bool DictionaryTrie::find(string word) const {
  * passed into the function up to an amount of numCompletions in order
  * of high to low frequency. If two words have the same frequency, then
  * they are ordered lexicographically.
+ *
+ * Parameter: prefix - a string that we will return all its completions
+ * Parameter: numCompletions - the max length of the list of predictions
  */
 vector<string> DictionaryTrie::predictCompletions(string prefix,
                                                   unsigned int numCompletions) {
@@ -180,7 +188,15 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
     return completionList;
 }
 
-/* TODO */
+/* This function takes in a string pattern which most likely contians
+ * underscores. These undrscores can be any character in the words that
+ * we will return. We will return all predictions for the pattern with 
+ * underscore wildcards up to a numCompletions number from high to low
+ * frequency.
+ *
+ * Parameter: pattern - a word that contains underscores as wildcard chars
+ * Parameter: numCompletions - the max length of the list of predictions
+ */
 std::vector<string> DictionaryTrie::predictUnderscores(
     string pattern, unsigned int numCompletions) {
     return {};
@@ -197,6 +213,8 @@ DictionaryTrie::~DictionaryTrie() {
 
 /* helper method for the destructor so that we can delete nodes
  * recursively without having to know the height of the trie 
+ *
+ * Parameter: node - a pointer to the current node we are deleting
  */
 void DictionaryTrie::deleteNodes( MWTNode* node ) {
 
@@ -222,6 +240,10 @@ void DictionaryTrie::deleteNodes( MWTNode* node ) {
 /* helper method for predictCompletions(), recurses down all of the
  * MWTNodes (after prefix) and if there is a valid word, it added the
  * word along with its frequency to the list passed in.
+ *
+ * Parameter: wordList - the list of all the word completions we track
+ * Parameter: curNode - the current node of the recursion
+ * Parameter: curWord - a string of the word built so far
  */
 void listWords( &vector<pair<string, unsigned int>*> wordList, 
                 MWTNode* curNode, string curWord ) {
@@ -259,6 +281,9 @@ void listWords( &vector<pair<string, unsigned int>*> wordList,
  * The rule is: The list is sorted from high frequency to low frequency,
  * if multiple words have the same frequency, then they are sorted
  * lexicographically.
+ *
+ * Parameter: p1 - the first pair to be compared
+ * Parameter: p2 - the second pair to be compared
  */
 bool compareFreq( pair<string, unsigned int> p1, 
                   pair<string, unsigned int> p2 ) {

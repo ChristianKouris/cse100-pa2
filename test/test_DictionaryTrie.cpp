@@ -1,7 +1,10 @@
 /**
- * TODO: File HEADER
+ * This function is a tester function for the DictionaryTrie Class. The methods
+ * tested here are insert, find, predictCompletions and predictUnderscores
  *
- * Author:
+ * Author: Christian Kouris
+ * Email: ckouris@ucsd.edu
+ * Sources:
  */
 
 #include <algorithm>

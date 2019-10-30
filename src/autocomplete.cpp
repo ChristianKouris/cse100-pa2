@@ -1,5 +1,13 @@
-/*
- * TODO: File Header
+/** 
+ * This function adds a user interface in order to use the MultiWay Trie to 
+ * its fullest potential. The user passes in a single file as an argument to
+ * build up the trie and then the user is put into a command loop where they
+ * can search for the predictions to a prefix and get a certain number of 
+ * predictions out of the function.
+ *
+ * Author: Christian Kouris
+ * Email: ckouris@ucsd.edu
+ * Sources: c++ vector reference
  */
 #include <fstream>
 #include <iostream>
