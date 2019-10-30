@@ -73,7 +73,10 @@ int main(int argc, char** argv) {
         cout << "Enter a number of completions:" << endl;
         cin >> numberOfCompletions;
 
-        // TODO
+        vector<string> completionList = predictCompletions( word, numberOfCompletions );
+        for( int i = 0; i < completionList.size(); i++ ) {
+            cout << completionList[i];
+        }
 
         cout << "Continue? (y/n)" << endl;
         cin >> cont;
