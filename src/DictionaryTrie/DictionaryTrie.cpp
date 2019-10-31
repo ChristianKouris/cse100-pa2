@@ -183,6 +183,9 @@ vector<string> DictionaryTrie::predictCompletions(
     }
 
     //free memory of allocated pairs
+    for( unsigned int i = 0; i < stringAndFreq->size(); i++ ) {
+        delete stringAndFreq->at(i);
+    }
     delete stringAndFreq;
 
     //return the list of predicted compltions
@@ -223,6 +226,9 @@ std::vector<string> DictionaryTrie::predictUnderscores(
     }
 
     //free memory of allocated pairs
+    for( unsigned int i = 0; i < stringAndFreq->size(); i++ ) {
+        delete stringAndFreq->at(i);
+    }
     delete stringAndFreq;
 
     //return the list of predicted underscores
