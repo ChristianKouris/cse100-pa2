@@ -81,12 +81,28 @@ int main(int argc, char** argv) {
         cout << "Enter a number of completions:" << endl;
         cin >> numberOfCompletions;
 
-        vector<string> completionList = 
-            dt->predictCompletions( word, numberOfCompletions );
-        for( unsigned int i = 0; i < completionList.size(); i++ ) {
-            cout << completionList[i];
+        bool isWildCard = false;
+        for( unsigned int i = 0; i < word.size(); i++ ) {
+            if( word[i] == '_' ) { isWildCard = true; }
         }
 
+        if( isWildCard ) {
+
+            vector<string> underscoreList = 
+                dt->predictUnderscores( word, numberOfCompletions );
+            for( unsigned int i = 0; i < underscoreList.size(); i++ ) {
+                cout << underscoreList[i] << endl;
+            }
+        
+        } else {
+            
+            vector<string> completionList = 
+                dt->predictCompletions( word, numberOfCompletions );
+            for( unsigned int i = 0; i < completionList.size(); i++ ) {
+                cout << completionList[i] << endl;
+            }
+        
+        }
         cout << "Continue? (y/n)" << endl;
         cin >> cont;
         cin.ignore();
