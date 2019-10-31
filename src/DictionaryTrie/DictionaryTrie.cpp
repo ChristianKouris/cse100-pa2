@@ -246,6 +246,7 @@ DictionaryTrie::~DictionaryTrie() {
 void DictionaryTrie::deleteNodes( MWTNode* node ) {
 
     if( node->hashMap.empty() == true ) {
+        delete node;
         return;
     }
     //create an iterator at the beginning
