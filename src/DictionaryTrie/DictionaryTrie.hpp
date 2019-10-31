@@ -61,7 +61,7 @@ class DictionaryTrie {
      * Parameter: curNode - the current node of the recursion
      * Parameter: curWord - a string of the word built so far
      */
-    void listWords( &vector<pair<string, unsigned int>*> wordList, 
+    void listWords( vector<pair<string, unsigned int>*> * wordList,
                     MWTNode* curNode, string curWord );
 
     /* Comparator method used to sort the list of words and their frequencies.
@@ -72,8 +72,8 @@ class DictionaryTrie {
      * Parameter: p1 - the first pair to be compared
      * Parameter: p2 - the second pair to be compared
      */
-    bool compareFreq( pair<string, unsigned int> p1, 
-                      pair<string, unsigned int> p2 );
+    static bool compareFreq( const pair<string, unsigned int> * p1, 
+                             const pair<string, unsigned int> * p2 );
     
   public:
     /* Default constructor for the DictionaryTrie class which is a MultiWay

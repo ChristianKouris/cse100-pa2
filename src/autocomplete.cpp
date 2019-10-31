@@ -81,8 +81,9 @@ int main(int argc, char** argv) {
         cout << "Enter a number of completions:" << endl;
         cin >> numberOfCompletions;
 
-        vector<string> completionList = predictCompletions( word, numberOfCompletions );
-        for( int i = 0; i < completionList.size(); i++ ) {
+        vector<string> completionList = 
+            dt->predictCompletions( word, numberOfCompletions );
+        for( unsigned int i = 0; i < completionList.size(); i++ ) {
             cout << completionList[i];
         }
 

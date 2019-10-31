@@ -44,3 +44,65 @@ TEST(DictTrieTests, REINSERT_TEST) {
     dict.insert("animal", 100);
     ASSERT_EQ(dict.insert("animal", 15), false);
 }
+
+TEST(DictTrieTests, PREDICT_COMPLETIONS_SIZE_TEST) {
+    DictionaryTrie dict;
+    dict.insert("animal", 100);
+    dict.insert("acme", 90);
+    dict.insert("coffee", 10);
+    dict.insert("animation", 100);
+    dict.insert("anarchy", 5);
+    dict.insert("beauty", 20);
+    dict.insert("an", 1000);
+    dict.insert("annihilate", 50);
+    dict.insert("anagram", 10);
+    vector<string> list = dict.predictCompletions("an", 4);
+    ASSERT_EQ( list.size(), 4 );
+}
+
+TEST(DictTrieTests, PREDICT_COMPLETIONS_OVER_SIZE_TEST) {
+    DictionaryTrie dict;
+    dict.insert("animal", 100);
+    dict.insert("acme", 90);
+    dict.insert("coffee", 10);
+    dict.insert("animation", 100);
+    dict.insert("anarchy", 5);
+    dict.insert("beauty", 20);
+    dict.insert("an", 1000);
+    dict.insert("annihilate", 50);
+    dict.insert("anagram", 10);
+    vector<string> list = dict.predictCompletions("an", 100);
+    ASSERT_EQ( list.size(), 6 );
+}
+
+TEST(DictTrieTests, PREDICT_COMPLETIONS_FREQ_ORDER_TEST) {
+    DictionaryTrie dict;
+    dict.insert("animal", 100);
+    dict.insert("acme", 90);
+    dict.insert("coffee", 10);
+    dict.insert("animation", 100);
+    dict.insert("anarchy", 5);
+    dict.insert("beauty", 20);
+    dict.insert("an", 1000);
+    dict.insert("annihilate", 50);
+    dict.insert("anagram", 10);
+    vector<string> list = dict.predictCompletions("an", 4);
+    ASSERT_EQ( list[0], "an" );
+    ASSERT_EQ( list[3], "annihilate" );
+}
+
+TEST(DictTrieTests, PREDICT_COMPLETIONS_ALPHABET_TEST) {
+    DictionaryTrie dict;
+    dict.insert("animal", 100);
+    dict.insert("acme", 90);
+    dict.insert("coffee", 10);
+    dict.insert("animation", 100);
+    dict.insert("anarchy", 5);
+    dict.insert("beauty", 20);
+    dict.insert("an", 1000);
+    dict.insert("annihilate", 50);
+    dict.insert("anagram", 10);
+    vector<string> list = dict.predictCompletions("an", 4);
+    ASSERT_EQ( list[1], "animal" );
+}
+

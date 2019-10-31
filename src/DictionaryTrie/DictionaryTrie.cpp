@@ -1,4 +1,4 @@
-/**
+ /**
  * The purpose of this cpp file is to provide implementation for the
  * methods whose signatures were defined in the hpp file. This trie
  * is built in the style of a MultiWay Trie that stores words and their
@@ -12,6 +12,7 @@
  */
 #include "DictionaryTrie.hpp"
 #include <iostream>
+#include <algorithm>
 
 /* Default constructor for the DictionaryTrie class which is a MultiWay
  * Trie. The constructor will create a root MWTNode.
@@ -107,7 +108,7 @@ bool DictionaryTrie::find(string word) const {
 
         } else {
     
-        currNode = currNode->hashMap.find(word[i])->second;
+            currNode = currNode->hashMap.find(word[i])->second;
 
         }
 
@@ -147,7 +148,7 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
     
     //first traverse down the Trie so we get to the node for prefix
     MWTNode* currNode = root;
-    for( int i = 0; i < prefix.size(); i++ ) { 
+    for( unsigned int i = 0; i < prefix.size(); i++ ) { 
 
         //go to the node
         currNode = currNode->hashMap.find(prefix[i])->second;
@@ -160,24 +161,25 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
     }
 
     //now that we're at the prefix, we want to get everything under it.
-    vector<pair<string,unsigned int>*> stringAndFreq = 
-        std::vector<std::pair<string, unsigned int>*>();
+    vector<pair<string,unsigned int>*> * stringAndFreq = 
+        new std::vector<std::pair<string, unsigned int>*>();
 
     
     //call the helper function
     listWords( stringAndFreq, currNode, prefix );
 
     //we now have an array of every word past prefix. We need to sort it
-    std::sort( stringAndFreq.begin(), stringAndFreq.end(), compareFreq);
+    std::sort( stringAndFreq->begin(), stringAndFreq->end(), compareFreq );
 
     //create a list to hold the predicted completions, create iterators
     //that will  end on either numCompletion loops or the end of the vector
     vector<string> completionList = std::vector<string>();
-    auto wordIter = stringAndFreq.begin(); int i = 0;
+    unsigned int i = 0; 
     //loop through numCompletion times or the entire vector of pairs
-    while ( i < numCompletions && wordIter != stringAndFreq.end() ) {
+    while (  i < numCompletions && i < stringAndFreq->size() ) {
 
-        completionList.push_back( (*wordIter)->first );
+        completionList.push_back( stringAndFreq->at(i)->first );
+        i++;
 
     }
 
@@ -245,8 +247,8 @@ void DictionaryTrie::deleteNodes( MWTNode* node ) {
  * Parameter: curNode - the current node of the recursion
  * Parameter: curWord - a string of the word built so far
  */
-void listWords( &vector<pair<string, unsigned int>*> wordList, 
-                MWTNode* curNode, string curWord ) {
+void DictionaryTrie::listWords( vector<pair<string, unsigned int>*> * wordList,
+                                MWTNode* curNode, string curWord ) {
 
     //base case of current node being null
     if( curNode == nullptr ) {
@@ -257,7 +259,7 @@ void listWords( &vector<pair<string, unsigned int>*> wordList,
     if( curNode->isEnd == true ) {
 
         //put the word and its frequency into the vector
-        wordList.push_back( 
+        wordList->push_back( 
             new std::pair<string, unsigned int>( curWord, curNode->freq ) );
 
     }
@@ -265,13 +267,15 @@ void listWords( &vector<pair<string, unsigned int>*> wordList,
     //create an iterator at the beginning
     auto iterator = curNode->hashMap.begin();
     //loop through each key
-    while( iterator != node->hashMap.end() ) {
+    while( iterator != curNode->hashMap.end() ) {
 
         //append the key character to the current word
-        newWord = curWord + iterator->first;
+        string newWord = curWord + iterator->first;
         
         //recurse down to listwords
         listWords( wordList, iterator->second, newWord ); 
+        
+        iterator++;
 
     }
 
@@ -285,17 +289,16 @@ void listWords( &vector<pair<string, unsigned int>*> wordList,
  * Parameter: p1 - the first pair to be compared
  * Parameter: p2 - the second pair to be compared
  */
-bool compareFreq( pair<string, unsigned int> p1, 
-                  pair<string, unsigned int> p2 ) {
+bool DictionaryTrie::compareFreq( const pair<string, unsigned int> * p1, 
+                                  const pair<string, unsigned int> * p2 ) {
 
     //if they have same frequency, they will be in alphabetical order
-    if( p1.second == p2.second ) {
+    if( p1->second == p2->second ) {
 
-        return p1.compare(p2) < 0;
+        return p1->first.compare(p2->first) < 0;
 
     }
 
-    return p2.second < p1.second;
-
+    return p2->second < p1->second;
 
 }
