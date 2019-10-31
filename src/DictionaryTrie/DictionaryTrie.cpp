@@ -143,20 +143,20 @@ bool DictionaryTrie::find(string word) const {
  * Parameter: prefix - a string that we will return all its completions
  * Parameter: numCompletions - the max length of the list of predictions
  */
-vector<string> DictionaryTrie::predictCompletions(string prefix,
-                                                  unsigned int numCompletions) {
+vector<string> DictionaryTrie::predictCompletions(
+    string prefix, unsigned int numCompletions) {
     
     //first traverse down the Trie so we get to the node for prefix
     MWTNode* currNode = root;
     for( unsigned int i = 0; i < prefix.size(); i++ ) { 
 
-        //go to the node
-        currNode = currNode->hashMap.find(prefix[i])->second;
-
         //check to see if we ended up in a node that doesn't exist
-        if( currNode == nullptr ) {
+        if( currNode->hashMap.find(prefix[i]) == currNode->hashMap.end() ) {
             return std::vector<string>();
         }
+        
+        //go to the node
+        currNode = currNode->hashMap.find(prefix[i])->second;
 
     }
 
@@ -171,8 +171,7 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
     //we now have an array of every word past prefix. We need to sort it
     std::sort( stringAndFreq->begin(), stringAndFreq->end(), compareFreq );
 
-    //create a list to hold the predicted completions, create iterators
-    //that will  end on either numCompletion loops or the end of the vector
+    //create a list to hold the predicted completions
     vector<string> completionList = std::vector<string>();
     unsigned int i = 0; 
     //loop through numCompletion times or the entire vector of pairs
@@ -201,7 +200,33 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
  */
 std::vector<string> DictionaryTrie::predictUnderscores(
     string pattern, unsigned int numCompletions) {
-    return {};
+    
+    //create a vector to hold the words and their frequencies
+    vector<pair<string,unsigned int>*> * stringAndFreq = 
+        new std::vector<std::pair<string, unsigned int>*>();
+
+    //call the recursion helper function to populate vector list
+    getPatterns( stringAndFreq, root, pattern, 0 );
+
+    //use the same sorter as in predictCompletions
+    std::sort( stringAndFreq->begin(), stringAndFreq->end(), compareFreq );
+
+    //Do the same thing as predictUnderscores to get a single string vector
+    vector<string> wildCardList = std::vector<string>();
+    unsigned int i = 0; 
+    //loop through numCompletion times or the entire vector of pairs
+    while (  i < numCompletions && i < stringAndFreq->size() ) {
+
+        wildCardList.push_back( stringAndFreq->at(i)->first );
+        i++;
+
+    }
+
+    //free memory of allocated pairs
+    delete stringAndFreq;
+
+    //return the list of predicted underscores
+    return wildCardList;
 }
 
 /* Standard destructor for the MWT class. It recurses down to all the 
@@ -276,6 +301,57 @@ void DictionaryTrie::listWords( vector<pair<string, unsigned int>*> * wordList,
         listWords( wordList, iterator->second, newWord ); 
         
         iterator++;
+
+    }
+
+}
+
+void DictionaryTrie::getPatterns( 
+    vector<pair<string, unsigned int>*> * wordList, MWTNode* curNode, 
+    string pattern, unsigned int pos ) {
+
+    //if we pass in a null Node
+    if( curNode == nullptr ) {
+        return;
+    }
+
+    //base case if we are after the last character
+    if( pos == pattern.size() ) {
+
+        //if it is an end of a word, add it to the list
+        if( curNode->isEnd ) {
+
+            wordList->push_back( 
+                new std::pair<string, unsigned int>(pattern, curNode->freq) );
+
+        }
+
+        //return since we have filled in the underscores
+        return;
+
+    }
+
+    //check to see if the current letter is an underscore or not
+    if( pattern[pos] == '_' ) {
+        
+        //if it is an underscore recurse down every character in curNode
+        auto iterator = curNode->hashMap.begin();
+        while( iterator != curNode->hashMap.end() ) {
+            string newStr = pattern;
+            *(newStr.begin() + pos) = iterator->first;
+            getPatterns( wordList, iterator->second, newStr, pos+1 );
+            iterator++;
+        }
+
+    } else {
+
+        //check to see if the char is in the tree
+        auto charIter = curNode->hashMap.find(pattern[pos]);
+        if( charIter == curNode->hashMap.end() ) {
+            return;
+        }
+
+        getPatterns( wordList, charIter->second, pattern, pos+1 );
 
     }
 

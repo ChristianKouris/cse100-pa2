@@ -64,6 +64,12 @@ class DictionaryTrie {
     void listWords( vector<pair<string, unsigned int>*> * wordList,
                     MWTNode* curNode, string curWord );
 
+    /* Helper method for predictUnderscores()
+     *
+     */
+    void getPatterns( vector<pair<string, unsigned int>*> * wordList,
+                      MWTNode* curNode, string pattern, unsigned int pos );
+
     /* Comparator method used to sort the list of words and their frequencies.
      * The rule is: The list is sorted from high frequency to low frequency,
      * if multiple words have the same frequency, then they are sorted

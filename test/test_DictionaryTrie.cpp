@@ -75,6 +75,21 @@ TEST(DictTrieTests, PREDICT_COMPLETIONS_OVER_SIZE_TEST) {
     ASSERT_EQ( list.size(), 6 );
 }
 
+TEST(DictTrieTests, PREDICT_COMPLETIONS_BAD_PREFIX_TEST) {
+    DictionaryTrie dict;
+    dict.insert("animal", 100);
+    dict.insert("acme", 90);
+    dict.insert("coffee", 10);
+    dict.insert("animation", 100);
+    dict.insert("anarchy", 5);
+    dict.insert("beauty", 20);
+    dict.insert("an", 1000);
+    dict.insert("annihilate", 50);
+    dict.insert("anagram", 10);
+    vector<string> list = dict.predictCompletions("hel", 10);
+    ASSERT_EQ( list.size(), 0 );
+}
+
 TEST(DictTrieTests, PREDICT_COMPLETIONS_FREQ_ORDER_TEST) {
     DictionaryTrie dict;
     dict.insert("animal", 100);
@@ -104,5 +119,65 @@ TEST(DictTrieTests, PREDICT_COMPLETIONS_ALPHABET_TEST) {
     dict.insert("anagram", 10);
     vector<string> list = dict.predictCompletions("an", 4);
     ASSERT_EQ( list[1], "animal" );
+}
+
+TEST(DictTrieTests, PREDICT_UNDERSCORES_SIZE_TEST) {
+    DictionaryTrie dict;
+    dict.insert("band", 100);
+    dict.insert("hand", 90);
+    dict.insert("handle", 10);
+    dict.insert("tang", 100);
+    dict.insert("fort", 5);
+    dict.insert("land", 20);
+    dict.insert("stand", 1000);
+    dict.insert("rand", 50);
+    dict.insert("bond", 10);
+    vector<string> list = dict.predictUnderscores("_an_", 3);
+    ASSERT_EQ( list.size(), 3 );
+}
+
+TEST(DictTrieTests, PREDICT_UNDERSCORES_OVER_SIZE_TEST) {
+    DictionaryTrie dict;
+    dict.insert("band", 100);
+    dict.insert("hand", 90);
+    dict.insert("handle", 10);
+    dict.insert("tang", 100);
+    dict.insert("fort", 5);
+    dict.insert("land", 20);
+    dict.insert("stand", 1000);
+    dict.insert("rand", 50);
+    dict.insert("bond", 10);
+    vector<string> list = dict.predictUnderscores("_an_", 20);
+    ASSERT_EQ( list.size(), 5 );
+}
+
+TEST(DictTrieTests, PREDICT_UNDERSCORES_FREQ_ORDER_TEST) {
+    DictionaryTrie dict;
+    dict.insert("band", 100);
+    dict.insert("hand", 90);
+    dict.insert("handle", 10);
+    dict.insert("tang", 5);
+    dict.insert("fort", 5);
+    dict.insert("land", 90);
+    dict.insert("stand", 1000);
+    dict.insert("rand", 50);
+    dict.insert("bond", 10);
+    vector<string> list = dict.predictUnderscores("_an_", 3);
+    ASSERT_EQ( list[0],  "band");
+}
+
+TEST(DictTrieTests, PREDICT_UNDERSCORES_ALPH_ORDER_TEST) {
+    DictionaryTrie dict;
+    dict.insert("band", 100);
+    dict.insert("land", 90);
+    dict.insert("handle", 10);
+    dict.insert("tang", 5);
+    dict.insert("fort", 5);
+    dict.insert("hand", 90);
+    dict.insert("stand", 1000);
+    dict.insert("rand", 50);
+    dict.insert("bond", 10);
+    vector<string> list = dict.predictUnderscores("_an_", 3);
+    ASSERT_EQ( list[1], "hand" );
 }
 
