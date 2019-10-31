@@ -64,8 +64,16 @@ class DictionaryTrie {
     void listWords( vector<pair<string, unsigned int>*> * wordList,
                     MWTNode* curNode, string curWord );
 
-    /* Helper method for predictUnderscores()
+    /* Helper method for predictUnderscores() which recurses down 
+     * the MWT. For each recursion we either recurse down the chracter at
+     * pos or if its an underscore recurse down all characters at pos.
+     * when pos reaches the end of pattern's length, it adds the word
+     * if valid.
      *
+     * Parameter: wordList - a list holding words and their frequencies
+     * Parameter: curNode - the current node in the recursion
+     * Parameter: pattern - the current string pattern
+     * Parameter: pos - the position in the pattern the recursion is at
      */
     void getPatterns( vector<pair<string, unsigned int>*> * wordList,
                       MWTNode* curNode, string pattern, unsigned int pos );
